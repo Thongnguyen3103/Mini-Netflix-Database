@@ -1,26 +1,54 @@
-# Mini-Netflix Database
+# Mini-Netflix
 
-## 1. Giới thiệu
-Dự án xây dựng cơ sở dữ liệu cho nền tảng phát trực tuyến theo yêu cầu Mini-Netflix bằng MySQL.
+Đồ án cơ sở dữ liệu — hệ thống quản lý phim trực tuyến.
 
-## 2. Mục tiêu
-- Quản lý người dùng.
-- Quản lý phim lẻ và phim bộ theo mô hình EER.
-- Quản lý mùa phim và tập phim.
-- Lưu lịch sử xem và tiến độ xem.
-- Thực hành truy vấn SQL và các quan hệ giữa bảng.
+## Công nghệ
 
-## 3. Công nghệ
-- MySQL
-- MySQL Workbench
-- SQL
+- PostgreSQL 18
 
-## 4. Cấu trúc dự án
-- `sql/01_create_database.sql`: Tạo cơ sở dữ liệu.
-- `sql/02_create_tables.sql`: Tạo các bảng và quan hệ.
-- `sql/03_insert_sample_data.sql`: Dữ liệu mẫu.
-- `sql/04_queries.sql`: Các truy vấn SQL.
-- `docs/erd.png`: Sơ đồ ERD/EER.
+## Sơ đồ CSDL
 
-## 5. Trạng thái
-Đang phát triển — thực hiện từng bước từ thiết kế EER đến truy vấn SQL.
+```mermaid
+erDiagram
+    LOAI_TAI_KHOAN ||--o{ USERS : "phan loai"
+    LOAI_TAI_KHOAN {
+        char(3) ma_loai PK
+        varchar ten_loai UK
+        varchar mo_ta
+        boolean trang_thai
+        timestamp ngay_tao
+    }
+    USERS {
+        char(7) id PK
+        varchar username UK
+        varchar email UK
+        varchar gioi_tinh
+        char(3) loai_tk FK
+        timestamp ngay_tao
+    }
+```
+
+### Mô tả các bảng
+
+| Bảng | Mô tả |
+|---|---|
+| `loai_tai_khoan` | Danh mục loại tài khoản (quản trị viên, kiểm duyệt viên, người dùng) |
+| `users` | Tài khoản người dùng, mỗi tài khoản thuộc đúng một loại |
+
+Quan hệ: một loại tài khoản có nhiều users (1–N), nối qua `users.loai_tk → loai_tai_khoan.ma_loai`.
+
+## Cài đặt
+
+```bash
+createdb Mini-Netflix
+psql -d Mini-Netflix -f schema.sql
+```
+
+## Cấu trúc thư mục
+
+```
+schema.sql     Script tạo bảng (nguồn chân lý của CSDL)
+docs/
+  erd.png      Sơ đồ ERD xuất từ pgAdmin (dùng cho báo cáo)
+  erd.pgerd    File gốc, mở lại bằng pgAdmin ERD Tool
+```
