@@ -71,6 +71,7 @@ psql -d Mini-Netflix -v ON_ERROR_STOP=1 -f SQL/02_indexes.sql
 psql -d Mini-Netflix -v ON_ERROR_STOP=1 -f SQL/03_triggers.sql
 psql -d Mini-Netflix -v ON_ERROR_STOP=1 -f SQL/04_views.sql
 psql -d Mini-Netflix -v ON_ERROR_STOP=1 -f SQL/05_seed_users.sql
+psql -d Mini-Netflix -v ON_ERROR_STOP=1 -f SQL/06_seed_sample_data.sql
 ```
 
 ## Cấu trúc thư mục
@@ -82,6 +83,7 @@ SQL/
   03_triggers.sql  Trigger cho các quy tắc nghiệp vụ
   04_views.sql     Tạo view
   05_seed_users.sql  Dữ liệu mẫu cho account_types và users
+  06_seed_sample_data.sql  Dữ liệu mẫu tiếng Việt: tài khoản, gói, phim, lịch sử xem
 Requirement/       Tài liệu yêu cầu của môn học
 ERD Mini Nextfix.pgerd  File sơ đồ, mở bằng pgAdmin ERD Tool (chưa cập nhật theo lược đồ mới)
 ```
