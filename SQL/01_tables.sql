@@ -112,7 +112,7 @@ CREATE TABLE payments (
 );
 
 
-/* ---------- Titles: category (union type) of movies and series ---------- */
+/* ---------- Titles: EER specialization into movies and series (disjoint, total) ---------- */
 
 CREATE TABLE titles (
     PRIMARY KEY (title_id),
