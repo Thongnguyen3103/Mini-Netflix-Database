@@ -84,6 +84,11 @@ SQL/
   04_views.sql     Tạo view
   05_seed_users.sql  Dữ liệu mẫu cho account_types và users
   06_seed_sample_data.sql  Dữ liệu mẫu tiếng Việt: tài khoản, gói, phim, lịch sử xem
+docs/
+  2.2_logical_mapping.md  Ánh xạ EER sang lược đồ quan hệ (báo cáo mục 2.2)
+  2.3_normalization.md    Phụ thuộc hàm và chứng minh chuẩn hóa (mục 2.3)
+  3_data_dictionary.md    Từ điển dữ liệu 18 bảng (mục 3)
+notebook/
+  eer_diagram.png  Sơ đồ EER (ký hiệu Elmasri)
 Requirement/       Tài liệu yêu cầu của môn học
-ERD Mini Nextfix.pgerd  File sơ đồ, mở bằng pgAdmin ERD Tool (chưa cập nhật theo lược đồ mới)
 ```

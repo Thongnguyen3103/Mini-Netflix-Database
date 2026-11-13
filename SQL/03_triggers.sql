@@ -265,3 +265,69 @@ AFTER DELETE OR UPDATE OF title_id ON series
 DEFERRABLE INITIALLY DEFERRED
 FOR EACH ROW
 EXECUTE FUNCTION check_title_has_subclass();
+
+
+/*
+ * ---------- Rule: a movie's release date falls in its title's release year ----------
+ * A movie stores titles.release_year and contents.release_date. When both are
+ * set, the year of release_date must equal release_year. Deferred to COMMIT so
+ * both values can be changed in one transaction.
+ */
+
+CREATE FUNCTION check_movie_release_year()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    checked_title_id   INTEGER;
+    checked_content_id BIGINT;
+    mismatch           RECORD;
+BEGIN
+    /* Read only the key the firing table has; the other stays NULL. */
+    IF TG_TABLE_NAME = 'titles' THEN
+        checked_title_id := NEW.title_id;
+    ELSE
+        checked_content_id := NEW.content_id;
+    END IF;
+
+    SELECT m.content_id,
+           t.release_year,
+           c.release_date
+      INTO mismatch
+      FROM movies AS m
+           INNER JOIN titles AS t
+           ON t.title_id = m.title_id
+
+           INNER JOIN contents AS c
+           ON c.content_id = m.content_id
+     WHERE (m.title_id = checked_title_id
+            OR m.content_id = checked_content_id)
+       AND t.release_year <> EXTRACT(YEAR FROM c.release_date);
+
+    IF FOUND THEN
+        RAISE EXCEPTION 'Movie % has release date % outside its release year %',
+                        mismatch.content_id, mismatch.release_date, mismatch.release_year
+              USING ERRCODE = 'check_violation';
+    END IF;
+
+    RETURN NULL;
+END;
+$$;
+
+CREATE CONSTRAINT TRIGGER movies_check_release_year
+AFTER INSERT OR UPDATE ON movies
+DEFERRABLE INITIALLY DEFERRED
+FOR EACH ROW
+EXECUTE FUNCTION check_movie_release_year();
+
+CREATE CONSTRAINT TRIGGER titles_check_movie_release_year
+AFTER UPDATE OF release_year ON titles
+DEFERRABLE INITIALLY DEFERRED
+FOR EACH ROW
+EXECUTE FUNCTION check_movie_release_year();
+
+CREATE CONSTRAINT TRIGGER contents_check_movie_release_year
+AFTER UPDATE OF release_date ON contents
+DEFERRABLE INITIALLY DEFERRED
+FOR EACH ROW
+EXECUTE FUNCTION check_movie_release_year();
