@@ -1,0 +1,140 @@
+erDiagram
+    account_types ||--o{ users : "account_type_code"
+    users ||--o{ profiles : "user_id"
+    plans ||--o{ subscriptions : "plan_id"
+    users ||--o{ subscriptions : "user_id"
+    subscriptions ||--o{ payments : "subscription_id"
+    titles ||--o| series : "title_id, title_type"
+    series ||--o{ seasons : "title_id"
+    contents ||--o| movies : "content_id, content_type"
+    titles ||--o| movies : "title_id, title_type"
+    contents ||--o| episodes : "content_id, content_type"
+    seasons ||--o{ episodes : "title_id, season_num"
+    genres ||--o{ title_genres : "genre_id"
+    titles ||--o{ title_genres : "title_id"
+    people ||--o{ title_credits : "person_id"
+    titles ||--o{ title_credits : "title_id"
+    contents ||--o{ watch_history : "content_id"
+    profiles ||--o{ watch_history : "user_id, profile_num"
+    titles ||--o{ watchlist_items : "title_id"
+    profiles ||--o{ watchlist_items : "user_id, profile_num"
+    account_types {
+        char_3 account_type_code PK
+        varchar_50 account_type_name UK
+        varchar_255 description "NULL"
+        boolean is_active
+        timestamp created_at
+    }
+    users {
+        char_7 user_id PK
+        varchar_50 username UK
+        varchar_100 email UK
+        varchar_255 password_hash
+        varchar_10 gender "NULL"
+        char_3 account_type_code FK
+        timestamp created_at
+    }
+    profiles {
+        char_7 user_id PK, FK
+        smallint profile_num PK
+        varchar_50 profile_name
+        boolean is_kids
+    }
+    plans {
+        smallint plan_id PK
+        varchar_50 plan_name UK
+        numeric_10_0 monthly_price
+        smallint max_profiles
+        varchar_10 video_quality
+        boolean is_active
+    }
+    subscriptions {
+        bigint subscription_id PK
+        char_7 user_id FK
+        smallint plan_id FK
+        date start_date
+        date end_date
+        varchar_10 subscription_status
+    }
+    payments {
+        bigint payment_id PK
+        bigint subscription_id FK
+        numeric_10_0 amount
+        varchar_20 payment_method
+        timestamp paid_at
+        varchar_10 payment_status
+    }
+    titles {
+        integer title_id PK
+        char_2 title_type
+        varchar_200 title_name
+        text description "NULL"
+        smallint release_year "NULL"
+        smallint age_rating
+    }
+    series {
+        integer title_id PK, FK
+        char_2 title_type FK
+        boolean is_finished
+    }
+    seasons {
+        integer title_id PK, FK
+        smallint season_num PK
+        varchar_100 season_name "NULL"
+        smallint release_year "NULL"
+    }
+    contents {
+        bigint content_id PK
+        char_2 content_type
+        integer duration_seconds
+        varchar_500 video_url
+        date release_date "NULL"
+    }
+    movies {
+        bigint content_id PK, FK
+        char_2 content_type FK
+        integer title_id FK, UK
+        char_2 title_type FK
+    }
+    episodes {
+        bigint content_id PK, FK
+        char_2 content_type FK
+        integer title_id FK
+        smallint season_num FK
+        smallint episode_num
+        varchar_200 episode_name "NULL"
+    }
+    genres {
+        smallint genre_id PK
+        varchar_50 genre_name UK
+    }
+    title_genres {
+        integer title_id PK, FK
+        smallint genre_id PK, FK
+    }
+    people {
+        integer person_id PK
+        varchar_100 full_name
+        date birth_date "NULL"
+        varchar_50 nationality "NULL"
+    }
+    title_credits {
+        integer title_id PK, FK
+        integer person_id PK, FK
+        varchar_10 credit_role PK
+        varchar_100 character_name "NULL"
+    }
+    watch_history {
+        char_7 user_id PK, FK
+        smallint profile_num PK, FK
+        bigint content_id PK, FK
+        timestamp started_at PK
+        timestamp ended_at "NULL"
+        integer position_seconds
+    }
+    watchlist_items {
+        char_7 user_id PK, FK
+        smallint profile_num PK, FK
+        integer title_id PK, FK
+        timestamp added_at
+    }

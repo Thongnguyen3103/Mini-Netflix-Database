@@ -107,12 +107,15 @@ SQL/
     rbac_tests.sql         Kiểm tra phân quyền
     performance_tests.sql  Đo hiệu năng chỉ mục
 docs/
-  2.2_logical_mapping.md  Ánh xạ EER sang lược đồ quan hệ (báo cáo mục 2.2)
+  1_introduction_scope.md  Mục tiêu, phạm vi, yêu cầu, quy tắc nghiệp vụ (báo cáo mục 1)
+  2.1_conceptual_model.md  Mô tả mô hình khái niệm EER (mục 2.1)
+  2.2_logical_mapping.md  Ánh xạ EER sang lược đồ quan hệ (mục 2.2)
   2.3_normalization.md    Phụ thuộc hàm và chứng minh chuẩn hóa (mục 2.3)
   3_data_dictionary.md    Từ điển dữ liệu 18 bảng (mục 3)
   4_implementation.md     Cài đặt, truy vấn nâng cao, hiệu năng (mục 4)
   5_verification_security.md  Kiểm thử ràng buộc và phân quyền (mục 5)
 notebook/
   eer_diagram.png  Sơ đồ EER (ký hiệu Elmasri)
+  physical_erd.png Sơ đồ vật lý Crow's Foot (kèm .svg và mã nguồn .mmd)
 Requirement/       Tài liệu yêu cầu của môn học
 ```
