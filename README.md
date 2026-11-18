@@ -72,7 +72,22 @@ psql -d Mini-Netflix -v ON_ERROR_STOP=1 -f SQL/03_triggers.sql
 psql -d Mini-Netflix -v ON_ERROR_STOP=1 -f SQL/04_views.sql
 psql -d Mini-Netflix -v ON_ERROR_STOP=1 -f SQL/05_seed_users.sql
 psql -d Mini-Netflix -v ON_ERROR_STOP=1 -f SQL/06_seed_sample_data.sql
+psql -d Mini-Netflix -v ON_ERROR_STOP=1 -f SQL/08_roles.sql
+psql -d Mini-Netflix -v ON_ERROR_STOP=1 -f SQL/09_seed_more_data.sql
 ```
+
+`08_roles.sql` cần quyền superuser vì tạo vai trò. `09_seed_more_data.sql` thêm khoảng 3 700 dòng dữ liệu mẫu, chỉ chạy một lần ngay sau `06`. Truy vấn mẫu nằm ở `SQL/07_queries.sql` và chỉ đọc dữ liệu.
+
+## Kiểm thử
+
+Các script trong `SQL/tests/` tự hoàn tác (`ROLLBACK`), nên không làm đổi dữ liệu:
+
+```bash
+psql -d Mini-Netflix -f SQL/tests/constraint_tests.sql
+psql -d Mini-Netflix -f SQL/tests/rbac_tests.sql
+```
+
+`performance_tests.sql` thêm khoảng 470 000 dòng và tạm xóa chỉ mục trong lúc chạy, nên chỉ chạy trên một database thử.
 
 ## Cấu trúc thư mục
 
@@ -84,10 +99,19 @@ SQL/
   04_views.sql     Tạo view
   05_seed_users.sql  Dữ liệu mẫu cho account_types và users
   06_seed_sample_data.sql  Dữ liệu mẫu tiếng Việt: tài khoản, gói, phim, lịch sử xem
+  07_queries.sql   14 truy vấn nâng cao
+  08_roles.sql     Phân quyền theo vai trò (GRANT/REVOKE)
+  09_seed_more_data.sql  Thêm khoảng 3 700 dòng dữ liệu mẫu tiếng Việt
+  tests/
+    constraint_tests.sql   Kiểm tra ràng buộc và trigger
+    rbac_tests.sql         Kiểm tra phân quyền
+    performance_tests.sql  Đo hiệu năng chỉ mục
 docs/
   2.2_logical_mapping.md  Ánh xạ EER sang lược đồ quan hệ (báo cáo mục 2.2)
   2.3_normalization.md    Phụ thuộc hàm và chứng minh chuẩn hóa (mục 2.3)
   3_data_dictionary.md    Từ điển dữ liệu 18 bảng (mục 3)
+  4_implementation.md     Cài đặt, truy vấn nâng cao, hiệu năng (mục 4)
+  5_verification_security.md  Kiểm thử ràng buộc và phân quyền (mục 5)
 notebook/
   eer_diagram.png  Sơ đồ EER (ký hiệu Elmasri)
 Requirement/       Tài liệu yêu cầu của môn học
